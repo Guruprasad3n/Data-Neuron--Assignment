@@ -1,0 +1,13 @@
+.panel-container {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .resize-handle {
+    width: 10px; /* Width of the resize handle */
+    cursor: ew-resize; /* Cursor style for resizing from left to right */
+    background-color: #ccc; /* Color of the resize handle */
+  }
+  
