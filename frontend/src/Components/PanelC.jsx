@@ -16,7 +16,7 @@ function PanelC() {
 
   const handleAdd = async () => {
     try {
-      await axios.post("http://localhost:8000/addData", { title, description });
+      await axios.post("https://data-neuron-assignment-ua7s.onrender.com/addData", { title, description });
       setTitle("");
       setDescription("");
       fetchCounts();
@@ -28,7 +28,7 @@ function PanelC() {
 
   const fetchCounts = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/count");
+      const response = await axios.get("https://data-neuron-assignment-ua7s.onrender.com/count");
       setAddCount(response.data.addCount);
       setUpdateCount(response.data.updateCount);
     } catch (error) {

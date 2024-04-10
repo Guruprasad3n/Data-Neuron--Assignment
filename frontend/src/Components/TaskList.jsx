@@ -36,7 +36,7 @@ function TaskList() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/viewAllTasks");
+      const response = await axios.get("https://data-neuron-assignment-ua7s.onrender.com/viewAllTasks");
       setTasks(response.data.tasks);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
@@ -62,7 +62,7 @@ function TaskList() {
 
 const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:8000/updateData/${taskId}`, {
+      await axios.put(`https://data-neuron-assignment-ua7s.onrender.com/updateData/${taskId}`, {
         title: updatedTitle,
         description: updatedDescription,
       });
@@ -76,7 +76,7 @@ const handleUpdate = async () => {
 
   const handleRemoveTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/delete/${id}`);
+      await axios.delete(`https://data-neuron-assignment-ua7s.onrender.com/delete/${id}`);
       fetchTasks();
     } catch (error) {
       console.error("Failed to remove task:", error);
