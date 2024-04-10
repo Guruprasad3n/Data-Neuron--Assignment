@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import TaskList from "./TaskList";
-import axios from "axios";
-import { Button, Input, FormControl, FormLabel } from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  FormControl,
+  FormLabel,
+  Container,
+} from "@chakra-ui/react";
+import axiosInstance from "../utility/Instance";
 
 function PanelC() {
   const [title, setTitle] = useState("");
@@ -16,7 +22,7 @@ function PanelC() {
 
   const handleAdd = async () => {
     try {
-      await axios.post("https://data-neuron-assignment-ua7s.onrender.com/addData", { title, description });
+      await axiosInstance.post("/addData", { title, description });
       setTitle("");
       setDescription("");
       fetchCounts();
@@ -28,9 +34,9 @@ function PanelC() {
 
   const fetchCounts = async () => {
     try {
-      const response = await axios.get("https://data-neuron-assignment-ua7s.onrender.com/count");
-      setAddCount(response.data.addCount);
-      setUpdateCount(response.data.updateCount);
+      const response = await axiosInstance.get("/count");
+      setAddCount(response.data.addUpdateCount.addCount);
+      setUpdateCount(response.data.addUpdateCount.updateCount);
     } catch (error) {
       console.error("Failed to fetch counts:", error);
     }
@@ -65,26 +71,28 @@ function PanelC() {
                   gap: "10px",
                 }}
               >
-                <FormControl>
-                  <FormLabel>Title</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Title</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </FormControl>
+                <Container>
+                  <FormControl>
+                    <FormLabel>Title</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Title</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </FormControl>
 
-                <Button onClick={handleAdd}>Add Task</Button>
+                  <Button onClick={handleAdd}>Add Task</Button>
+                </Container>
               </Panel>
               <PanelResizeHandle onResize={handleResize} />
               <Panel

@@ -8,13 +8,6 @@ const taskSchema = new Schema({
 });
 const taskModel = model("Task", taskSchema);
 
+module.exports = taskModel;
 
 
-const countSchema = new Schema({
-  addCount: { type: Number, default: 0 },
-  updateCount: { type: Number, default: 0 },
-});
-
-const countModel = model("Count", countSchema);
-
-module.exports = { taskModel, countModel };

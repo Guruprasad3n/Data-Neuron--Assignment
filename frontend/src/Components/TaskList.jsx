@@ -15,13 +15,11 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
-  TableContainer,
 } from "@chakra-ui/react";
+import axiosInstance from "../utility/Instance";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -36,7 +34,7 @@ function TaskList() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("https://data-neuron-assignment-ua7s.onrender.com/viewAllTasks");
+      const response = await axiosInstance.get(`/viewAllTasks`);
       setTasks(response.data.tasks);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
@@ -58,11 +56,9 @@ function TaskList() {
     openModal(id, title, description);
   };
 
-
-
-const handleUpdate = async () => {
+  const handleUpdate = async () => {
     try {
-      await axios.put(`https://data-neuron-assignment-ua7s.onrender.com/updateData/${taskId}`, {
+      await axiosInstance.put(`/updateData/${taskId}`, {
         title: updatedTitle,
         description: updatedDescription,
       });
@@ -72,11 +68,10 @@ const handleUpdate = async () => {
       console.error("Failed to update task:", error);
     }
   };
-  
 
   const handleRemoveTask = async (id) => {
     try {
-      await axios.delete(`https://data-neuron-assignment-ua7s.onrender.com/delete/${id}`);
+      await axiosInstance.delete(`/delete/${id}`);
       fetchTasks();
     } catch (error) {
       console.error("Failed to remove task:", error);
@@ -115,7 +110,8 @@ const handleUpdate = async () => {
               </Td>
 
               <Td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                <Button colorScheme='blue'
+                <Button
+                  colorScheme="blue"
                   onClick={() =>
                     handleUpdateTask(task._id, task.title, task.description)
                   }
@@ -124,7 +120,10 @@ const handleUpdate = async () => {
                 </Button>
               </Td>
               <Td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                <Button colorScheme='red' onClick={() => handleRemoveTask(task._id)}>
+                <Button
+                  colorScheme="red"
+                  onClick={() => handleRemoveTask(task._id)}
+                >
                   Remove
                 </Button>
               </Td>
