@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../utility/Instance";
 import {
   Modal,
   ModalOverlay,
@@ -19,7 +19,6 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
-import axiosInstance from "../utility/Instance";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -27,17 +26,22 @@ function TaskList() {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedDescription, setUpdatedDescription] = useState("");
   const [taskId, setTaskId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
   const fetchTasks = async () => {
+    setIsLoading(true);
     try {
       const response = await axiosInstance.get(`/viewAllTasks`);
       setTasks(response.data.tasks);
     } catch (error) {
-      console.error("Failed to fetch tasks:", error);
+      setError("Failed to fetch tasks. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,6 +61,7 @@ function TaskList() {
   };
 
   const handleUpdate = async () => {
+    setIsLoading(true);
     try {
       await axiosInstance.put(`/updateData/${taskId}`, {
         title: updatedTitle,
@@ -65,22 +70,29 @@ function TaskList() {
       closeModal();
       fetchTasks();
     } catch (error) {
-      console.error("Failed to update task:", error);
+      setError("Failed to update task. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRemoveTask = async (id) => {
+    setIsLoading(true);
     try {
       await axiosInstance.delete(`/delete/${id}`);
       fetchTasks();
     } catch (error) {
-      console.error("Failed to remove task:", error);
+      setError("Failed to remove task. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
       <h2>All Tasks</h2>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
       <Table style={{ borderCollapse: "collapse", width: "100%" }}>
         <Thead>
           <Tr style={{ backgroundColor: "#f2f2f2" }}>
@@ -159,7 +171,12 @@ function TaskList() {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleUpdate}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleUpdate}
+              isLoading={isLoading}
+            >
               Update
             </Button>
             <Button onClick={closeModal}>Cancel</Button>
